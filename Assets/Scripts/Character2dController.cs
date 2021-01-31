@@ -6,10 +6,21 @@ public class Character2dController : MonoBehaviour
 {
     
     public float MovementSpeed = 1;
-    // Start is called before the first frame update
-    private void Start()
+    public string facing = "right";
+    public string previousFacing;
+
+    private void Awake()
     {
-        
+        previousFacing = facing;
+    }
+
+    private Animator animator;
+
+
+    
+    void Start(){
+
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -17,16 +28,43 @@ public class Character2dController : MonoBehaviour
     {
         var movement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(movement,0,0) * Time.deltaTime * MovementSpeed;
-    // flip the character
-        Vector3 characterScale = transform.localScale;
-        if(Input.GetAxis("Horizontal") < 0){
-            characterScale.x = -10;
-        }
-        if(Input.GetAxis("Horizontal") < 0){
-            characterScale.x = 10;
-        }
-        transform.localScale = characterScale;
-    
-    
+        
+        Vector2 move = Vector2.zero;
+        move.x = Input.GetAxis("Horizontal");
+        // call function
+        DetermineFacing(move);
+
     }
+    void DetermineFacing(Vector2 move)
+    {
+        if (move.x < -0.01f)
+        {
+            facing = "left";
+            animator.SetBool("estaCaminando",true);
+
+        }
+        else if (move.x > 0.01f)
+        {
+            facing = "right";
+            animator.SetBool("estaCaminando",true);
+        }
+        else {
+            animator.SetBool("estaCaminando",false);
+
+        }
+        // if there is a change in direction
+        if (previousFacing != facing)
+        {
+            // update direction
+            previousFacing = facing;
+            // change transform
+            gameObject.transform.Rotate(0, 180, 0);
+        }
+}
+
+
+
+
+
+
 }
