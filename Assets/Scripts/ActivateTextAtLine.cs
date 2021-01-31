@@ -25,14 +25,13 @@ public class ActivateTextAtLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isInRangeDialog){
 
-            if(Input.GetKeyDown(interactKey)){  // And Player presses key
-                theTextBox.ReloadScript(theText);
-                theTextBox.currentLine = startLine;
-                theTextBox.endAtLine = endLine;
-                theTextBox.EnableTextBox(); 
+        if(Input.GetKeyDown(interactKey)){ 
+            if(isInRangeDialog){
+                load_dialog();
             }
+         //   Debug.Log("Tecla Presionada"); // And Player presses key
+         //   Debug.Log("isInRangeDialog");
         }
         
     }
@@ -42,14 +41,30 @@ public class ActivateTextAtLine : MonoBehaviour
         if(other.name == "MC")
         {
             isInRangeDialog = true;
+        } 
+        
+        //    if (destroyWhenActivated)
+        //    {
+               // Destroy(gameObject);
+        //    }
         
 
+    }
 
-            if (destroyWhenActivated)
-            {
-               // Destroy(gameObject);
-            }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.name == "MC"){
+            isInRangeDialog = false;
+            //Debug.Log("Player not in range");
         }
+    }
+
+    void load_dialog(){
+
+                theTextBox.ReloadScript(theText);
+                theTextBox.currentLine = startLine;
+                theTextBox.endAtLine = endLine;
+                theTextBox.EnableTextBox(); 
 
     }
 }
